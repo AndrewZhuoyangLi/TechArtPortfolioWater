@@ -64,15 +64,15 @@ Shader "Unlit/Simple Water"
 			{
 				v2f o;
 				UNITY_INITIALIZE_OUTPUT(v2f, o);
-				float4 tex = tex2Dlod(_NoiseTex, float4(v.uv.xy, 0, 0));//tex = 1;//extra noise tex
 				float4 worldPosition = mul(unity_ObjectToWorld,v.vertex);
+				float2 uv = -worldPosition.xz*0.1+0.5; //为了在c#中sample texture得把uv用世界空间位置表示
+				float4 tex = tex2Dlod(_NoiseTex, float4(uv*0.4, 0, 0)); //这里加的0.4纯为了调效果
 				worldPosition.y += sin(_Time.y*2 * _Speed + (worldPosition.x * worldPosition.z * _Amount * tex)) * _Height;//movement
 				v.vertex = mul(unity_WorldToObject,worldPosition);
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.worldPos = mul(unity_ObjectToWorld, v.vertex);
 				
- 
-				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+				o.uv = tex;
 				o.scrPos = ComputeScreenPos(o.vertex); 
 						
 				return o;
@@ -80,7 +80,8 @@ Shader "Unlit/Simple Water"
  
 			fixed4 frag (v2f i) : SV_Target
 			{
-				float2 uv = i.worldPos.xz - _Position.xz;
+				//return i.uv.x;
+				float2 uv = i.worldPos.xz - _Position.xz;//from worldPos to the orthographic camera's position in world space. 
 				uv = uv/(_OrthographicCamSize *2);
 				uv += 0.5;
 				float ripples = tex2D(_GlobalEffectRT, uv).b;
