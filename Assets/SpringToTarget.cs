@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using SpringMath;
 using UnityEngine.Serialization;
 
 public class SpringToTarget : MonoBehaviour
@@ -32,13 +31,13 @@ public class SpringToTarget : MonoBehaviour
     }
 
     private void Update() {
-        //update spring params
-        spring.targetPosition = WaterHeightAt;
-        
-        //simulate spring 
-        spring.Simulate(Time.deltaTime);
-        
-        //apply simulation result
-        transform.position = new Vector3(transform.position.x, spring.currentPosition, transform.position.z);
+        // //update spring params
+        // spring.targetPosition = WaterHeightAt;
+        //
+        // //simulate spring 
+        // spring.Simulate(Time.deltaTime);
+        //
+        // //apply simulation result
+        // transform.position = new Vector3(transform.position.x, spring.currentPosition, transform.position.z);
     }
 }
